@@ -12,7 +12,7 @@ public final class Consts {
     public static final int LOG_LEVEL_WARN = 2;
     public static final int LOG_LEVEL_DISABLE = 3;
 
-    public static final int LOG_LEVEL = LOG_LEVEL_TRACE;
+    public static final int LOG_LEVEL = LOG_LEVEL_WARN;
 
     private Consts() {
     }

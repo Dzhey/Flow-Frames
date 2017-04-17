@@ -1,8 +1,6 @@
 package com.github.dzhey.flow_frames;
 
-import android.util.Log;
-
-import java.util.Locale;
+import com.github.dzhey.flow_frames.internal.TraversalLoggerImpl;
 
 /**
  * @author Eugene Byzov gdzhey@gmail.com
@@ -11,28 +9,30 @@ import java.util.Locale;
  */
 public final class Logger {
 
+    private static TraversalLogger sLogger = new TraversalLoggerImpl();
+
+    public static TraversalLogger getLogger() {
+        return sLogger;
+    }
+
+    public static void setLogger(TraversalLogger logger) {
+        sLogger = logger;
+    }
+
     public static void trace(Object tag, String msg, Object... args) {
-        if (Consts.LOG_LEVEL >= Consts.LOG_LEVEL_TRACE) {
-            Log.v(tag.getClass().getName(), String.format(Locale.US, msg, args));
-        }
+        sLogger.trace(tag, msg, args);
     }
 
     public static void debug(Object tag, String msg, Object... args) {
-        if (Consts.LOG_LEVEL >= Consts.LOG_LEVEL_DEBUG) {
-            Log.d(tag.getClass().getName(), String.format(Locale.US, msg, args));
-        }
+        sLogger.debug(tag, msg, args);
     }
 
     public static void warn(Object tag, String msg, Object... args) {
-        if (Consts.LOG_LEVEL >= Consts.LOG_LEVEL_WARN) {
-            Log.w(tag.getClass().getName(), String.format(Locale.US, msg, args));
-        }
+        sLogger.warn(tag, msg, args);
     }
 
     public static void warn(Object tag, Object object) {
-        if (Consts.LOG_LEVEL >= Consts.LOG_LEVEL_WARN) {
-            Log.w(tag.getClass().getName(), String.valueOf(object));
-        }
+        sLogger.warn(tag, object);
     }
 
     private Logger() {
