@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -263,9 +264,56 @@ public class SimpleTraversalFrameChanger implements TraversalFrameChanger {
     }
 
     protected void removeViews(ViewGroup root, Collection<TransitionSpec> specs) {
-        for (TransitionSpec spec : specs) {
-            removeViews(root, spec);
+        final List<View> removedViews = new ArrayList<>();
+
+        outer: for (TransitionSpec spec : specs) {
+            final Collection<View> viewsToRemove = getRemovedViews(spec);
+
+            if (viewsToRemove.isEmpty()) {
+                continue;
+            }
+
+            final ViewGroup containerView = tryFindContainerView(root, spec.containerId());
+
+            if (containerView == null) {
+                for (View removedView : removedViews) {
+                    if (removedView.getId() == spec.containerId()) {
+                        // view container is already removed
+                        continue outer;
+                    }
+
+                    if (removedView.findViewById(spec.containerId()) == null) {
+                        // view container (inner) is already removed
+                        continue outer;
+                    }
+                }
+
+                final View[] viewsArray = new View[viewsToRemove.size()];
+                viewsToRemove.toArray(viewsArray);
+
+                throw new IllegalStateException(String.format(Locale.US,
+                        "unable to find container to remove view %s from", viewsArray[0]));
+            }
+
+            for (View viewToRemove : viewsToRemove) {
+                containerView.removeView(viewToRemove);
+            }
+            removedViews.addAll(viewsToRemove);
         }
+    }
+
+    protected @Nullable ViewGroup tryFindContainerView(
+            ViewGroup rootView, @IdRes int containerId) {
+
+        if (containerId == 0) {
+            return rootView;
+        }
+
+        if (containerId == rootView.getId()) {
+            return rootView;
+        }
+
+        return (ViewGroup) rootView.findViewById(containerId);
     }
 
     protected void removeViews(ViewGroup root, TransitionSpec spec) {
