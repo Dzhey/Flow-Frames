@@ -2,7 +2,7 @@ package com.github.dzhey.flow_frames;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * @author Eugene Byzov <gdzhey@gmail.com>

@@ -1,7 +1,7 @@
 package com.github.dzhey.flow_frames;
 
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.parceler.Parcel;
 import org.parceler.ParcelPropertyConverter;

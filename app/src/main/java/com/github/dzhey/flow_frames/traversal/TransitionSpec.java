@@ -1,7 +1,6 @@
 package com.github.dzhey.flow_frames.traversal;
 
-import android.support.annotation.IdRes;
-import android.view.View;
+import androidx.annotation.IdRes;
 
 import java.util.Collection;
 

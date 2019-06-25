@@ -1,6 +1,6 @@
 package com.github.dzhey.flow_frames;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 
 /**
  * @author Eugene Byzov gdzhey@gmail.com

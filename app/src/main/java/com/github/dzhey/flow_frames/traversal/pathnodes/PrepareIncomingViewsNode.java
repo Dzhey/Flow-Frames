@@ -1,7 +1,7 @@
 package com.github.dzhey.flow_frames.traversal.pathnodes;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +13,6 @@ import com.github.dzhey.flow_frames.R;
 import com.github.dzhey.flow_frames.Screen;
 import com.github.dzhey.flow_frames.traversal.InflatedLayoutMapping;
 import com.github.dzhey.flow_frames.traversal.TraversalContext;
-import com.github.dzhey.flow_frames.traversal.ViewSwapTraversalListener;
 import com.github.dzhey.flow_frames.utils.ScreenViewUtils;
 
 /**

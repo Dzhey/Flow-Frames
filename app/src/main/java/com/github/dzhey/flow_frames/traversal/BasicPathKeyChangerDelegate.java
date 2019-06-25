@@ -1,6 +1,6 @@
 package com.github.dzhey.flow_frames.traversal;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.github.dzhey.flow_frames.HistoryFrame;
 import com.github.dzhey.flow_frames.Logger;

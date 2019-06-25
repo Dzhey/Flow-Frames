@@ -1,6 +1,6 @@
 package com.github.dzhey.flow_frames.traversal.pathnodes;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
 import java.util.Collection;

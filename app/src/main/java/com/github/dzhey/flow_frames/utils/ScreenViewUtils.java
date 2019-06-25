@@ -1,7 +1,7 @@
 package com.github.dzhey.flow_frames.utils;
 
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -10,7 +10,6 @@ import java.util.List;
 
 import com.github.dzhey.flow_frames.LayoutSpec;
 import com.github.dzhey.flow_frames.R;
-import com.github.dzhey.flow_frames.Screen;
 
 /**
  * @author Eugene Byzov <gdzhey@gmail.com>

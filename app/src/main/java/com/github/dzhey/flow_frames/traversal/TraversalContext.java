@@ -1,7 +1,7 @@
 package com.github.dzhey.flow_frames.traversal;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.ViewGroup;
 
 import com.github.dzhey.flow_frames.LayoutSpec;
