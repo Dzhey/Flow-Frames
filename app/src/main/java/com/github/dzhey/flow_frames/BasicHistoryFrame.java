@@ -166,9 +166,9 @@ public class BasicHistoryFrame implements RestorableHistoryFrame {
 
     @Override
     public boolean onGoBack() {
-        for (Screen screen : mScreens) {
-            if (screen instanceof HandlesBack) {
-                if (((HandlesBack) screen).onGoBack()) {
+        for (int i = mScreens.size() - 1; i >= 0; i--) {
+            if (mScreens.get(i) instanceof HandlesBack) {
+                if (((HandlesBack) mScreens.get(i)).onGoBack()) {
                     return true;
                 }
             }
