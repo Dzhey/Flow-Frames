@@ -282,7 +282,7 @@ public class SimpleTraversalFrameChanger implements TraversalFrameChanger {
                         continue outer;
                     }
 
-                    if (removedView.findViewById(spec.containerId()) == null) {
+                    if (removedView.findViewById(spec.containerId()) != null) {
                         // view container (inner) is already removed
                         continue outer;
                     }
