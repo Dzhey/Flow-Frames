@@ -73,7 +73,6 @@ public abstract class BasePathKeyChangerDelegate implements ContextKeyChanger.De
         mWatcherEventDispatcher.onEnterTraversal(wrapper);
 
         final PathNode pathNode = traversalPath.getFirstPathNode();
-
         mWatcherEventDispatcher.onNextPathNode(wrapper, pathNode);
         visitor.visit(wrapper, pathNode, this);
     }
@@ -100,7 +99,7 @@ public abstract class BasePathKeyChangerDelegate implements ContextKeyChanger.De
         final PathNode nextNode = path.getNextNode(pathNode);
 
         if (nextNode != null) {
-            mWatcherEventDispatcher.onNextPathNode(wrapper, pathNode);
+            mWatcherEventDispatcher.onNextPathNode(wrapper, nextNode);
             getPathVisitor().visit(wrapper, nextNode, this);
         } else {
             Logger.trace(this, "traversal completed, calling completion callback");

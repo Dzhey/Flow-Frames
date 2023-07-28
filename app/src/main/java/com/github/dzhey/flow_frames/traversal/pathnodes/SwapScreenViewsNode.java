@@ -1,12 +1,8 @@
 package com.github.dzhey.flow_frames.traversal.pathnodes;
 
-import androidx.annotation.Nullable;
 import android.view.View;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
+import androidx.annotation.Nullable;
 
 import com.github.dzhey.flow_frames.HistoryFrame;
 import com.github.dzhey.flow_frames.LayoutSpec;
@@ -16,6 +12,13 @@ import com.github.dzhey.flow_frames.traversal.TraversalContext;
 import com.github.dzhey.flow_frames.traversal.TraversalFrameChanger;
 import com.github.dzhey.flow_frames.traversal.TraversalFrameChangerResolver;
 import com.github.dzhey.flow_frames.traversal.ViewSwapTraversalListener;
+import com.github.dzhey.flow_frames.traversal.ViewSwapTraversalSubscriber;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Eugene Byzov <gdzhey@gmail.com>
@@ -25,11 +28,24 @@ import com.github.dzhey.flow_frames.traversal.ViewSwapTraversalListener;
 public class SwapScreenViewsNode extends BasePathNode {
 
     private final TraversalFrameChangerResolver mTraversalFrameChangerResolver;
+    private CopyOnWriteArrayList<ViewSwapTraversalSubscriber> mSubscribers;
 
     public SwapScreenViewsNode(TraversalFrameChangerResolver traversalFrameChangerResolver) {
         super(PathNode.Names.SWAP_SCREEN_VIEWS);
 
         mTraversalFrameChangerResolver = traversalFrameChangerResolver;
+    }
+
+    public void addSubscriber(ViewSwapTraversalSubscriber subscriber) {
+        if (mSubscribers == null) {
+            mSubscribers = new CopyOnWriteArrayList<>();
+        }
+        mSubscribers.add(subscriber);
+    }
+
+    public void removeSubscriber(ViewSwapTraversalSubscriber subscriber) {
+        if (mSubscribers == null) return;
+        mSubscribers.remove(subscriber);
     }
 
     @Override
@@ -73,11 +89,21 @@ public class SwapScreenViewsNode extends BasePathNode {
                     if (view instanceof ViewSwapTraversalListener) {
                         ((ViewSwapTraversalListener) view).onExitRemoveTraversal(traversalContext);
                     }
+                    if (mSubscribers != null) {
+                        for (ViewSwapTraversalSubscriber subscriber : mSubscribers) {
+                            subscriber.onExitRemoveTraversal(view, traversalContext);
+                        }
+                    }
                 }
 
                 for (View view : incomingViews) {
                     if (view instanceof ViewSwapTraversalListener) {
                         ((ViewSwapTraversalListener) view).onExitTraversal(traversalContext);
+                    }
+                    if (mSubscribers != null) {
+                        for (ViewSwapTraversalSubscriber subscriber : mSubscribers) {
+                            subscriber.onExitTraversal(view, traversalContext);
+                        }
                     }
                 }
 
@@ -85,8 +111,14 @@ public class SwapScreenViewsNode extends BasePathNode {
                     if (view instanceof ViewSwapTraversalListener) {
                         ((ViewSwapTraversalListener) view).onExitAddTraversal(traversalContext);
                     }
+                    if (mSubscribers != null) {
+                        for (ViewSwapTraversalSubscriber subscriber : mSubscribers) {
+                            subscriber.onExitAddTraversal(view, traversalContext);
+                        }
+                    }
                 }
 
+                mSubscribers = null;
                 onAppliedCallback.onApplied();
             }
         };
@@ -95,17 +127,32 @@ public class SwapScreenViewsNode extends BasePathNode {
             if (view instanceof ViewSwapTraversalListener) {
                 ((ViewSwapTraversalListener) view).onEnterRemoveTraversal(traversalContext);
             }
+            if (mSubscribers != null) {
+                for (ViewSwapTraversalSubscriber subscriber : mSubscribers) {
+                    subscriber.onEnterRemoveTraversal(view, traversalContext);
+                }
+            }
         }
 
         for (View view : incomingViews) {
             if (view instanceof ViewSwapTraversalListener) {
                 ((ViewSwapTraversalListener) view).onEnterTraversal(traversalContext);
             }
+            if (mSubscribers != null) {
+                for (ViewSwapTraversalSubscriber subscriber : mSubscribers) {
+                    subscriber.onEnterTraversal(view, traversalContext);
+                }
+            }
         }
 
         for (View view : addedViews) {
             if (view instanceof ViewSwapTraversalListener) {
                 ((ViewSwapTraversalListener) view).onEnterAddTraversal(traversalContext);
+            }
+            if (mSubscribers != null) {
+                for (ViewSwapTraversalSubscriber subscriber : mSubscribers) {
+                    subscriber.onEnterAddTraversal(view, traversalContext);
+                }
             }
         }
 
