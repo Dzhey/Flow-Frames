@@ -15,4 +15,6 @@ public interface Screen extends Scoped, HasScopeName {
     void onDetach();
 
     boolean isAttached();
+
+    boolean isInScope();
 }

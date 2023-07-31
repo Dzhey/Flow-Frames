@@ -28,6 +28,9 @@ public class EnterIncomingScopeNode extends IncomingScreenPathNode {
                 .getScreenScope(containerView.getContext(), screen);
 
         scope.register(screen);
+        if (!screen.isInScope()) {
+            screen.onEnterScope(scope);
+        }
 
         onAppliedCallback.onApplied();
     }
