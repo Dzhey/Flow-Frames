@@ -301,22 +301,44 @@ public class BasicHistoryFrame implements RestorableHistoryFrame {
             mScreens = new ArrayList<>();
         }
 
+        public Builder(BasicHistoryFrame frame) {
+            this();
+            withScreens(frame.getScreens());
+            withTags(frame.getTags());
+            withFrameName(frame.getName());
+            withReplaceFrameChanger(frame.getReplaceFrameChanger());
+            withEnterFrameChanger(frame.getEnterFrameChanger());
+            withExitFrameChanger(frame.getExitFrameChanger());
+        }
+
         public Builder withScreen(Screen screen) {
+            mScreens.remove(screen);
             mScreens.add(screen);
 
             return this;
         }
 
         public Builder withScreens(Screen... screens) {
+            if (!mScreens.isEmpty()) {
+                mScreens.removeAll(Arrays.asList(screens));
+            }
             Collections.addAll(mScreens, screens);
 
             return this;
         }
 
         public Builder withScreens(Collection<Screen> screens) {
+            if (!mScreens.isEmpty()) {
+                mScreens.removeAll(screens);
+            }
             mScreens.addAll(screens);
 
             return this;
+        }
+
+        public Builder withScreensOnly(Collection<Screen> screens) {
+            mScreens.clear();
+            return withScreens(screens);
         }
 
         public Builder withEnterFrameChanger(TraversalFrameChanger frameChanger) {
