@@ -322,6 +322,11 @@ public class SimpleTraversalFrameChanger implements TraversalFrameChanger {
         if (removedViews.isEmpty()) {
             return;
         }
+        boolean viewsDetached = true;
+        for (View view : removedViews) {
+            viewsDetached = viewsDetached && !view.isAttachedToWindow();
+        }
+        if (viewsDetached) return;
 
         final ViewGroup container = findContainerView(root, spec.containerId());
 
