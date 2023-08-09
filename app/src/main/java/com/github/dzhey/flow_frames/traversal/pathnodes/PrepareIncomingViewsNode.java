@@ -48,15 +48,13 @@ public class PrepareIncomingViewsNode extends IncomingScreenPathNode {
             }
 
             final ViewGroup container = findContainerForLayoutMapping(traversalContext, mapping);
-            if (container == null) {
-                throw new IllegalStateException(String.format(
-                        "unable to find container view for screen %s", screen));
-            }
-
             final String layoutTag = ScreenViewUtils.makeViewLayoutTag(mapping);
-            View view = ScreenViewUtils.findViewByTag(container,
-                    R.id.__screens_key_changer_view_layout_id,
-                    layoutTag);
+            View view = null;
+            if (container != null) {
+                view = ScreenViewUtils.findViewByTag(container,
+                        R.id.__screens_key_changer_view_layout_id,
+                        layoutTag);
+            }
 
             if (view == null) {
                 final Context context = screenScope.createContext(containerView.getContext());
