@@ -312,25 +312,18 @@ public class BasicHistoryFrame implements RestorableHistoryFrame {
         }
 
         public Builder withScreen(Screen screen) {
-            mScreens.remove(screen);
             mScreens.add(screen);
 
             return this;
         }
 
         public Builder withScreens(Screen... screens) {
-            if (!mScreens.isEmpty()) {
-                mScreens.removeAll(Arrays.asList(screens));
-            }
             Collections.addAll(mScreens, screens);
 
             return this;
         }
 
         public Builder withScreens(Collection<Screen> screens) {
-            if (!mScreens.isEmpty()) {
-                mScreens.removeAll(screens);
-            }
             mScreens.addAll(screens);
 
             return this;

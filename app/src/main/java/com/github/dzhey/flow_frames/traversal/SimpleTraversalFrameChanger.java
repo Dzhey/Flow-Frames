@@ -1,10 +1,11 @@
 package com.github.dzhey.flow_frames.traversal;
 
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.github.dzhey.flow_frames.BasicHistoryFrame;
 import com.github.dzhey.flow_frames.HistoryFrame;
@@ -342,22 +343,11 @@ public class SimpleTraversalFrameChanger implements TraversalFrameChanger {
     }
 
     protected ViewGroup findContainerView(ViewGroup rootView, @IdRes int containerId) {
-        if (containerId == 0) {
-            return rootView;
-        }
-
-        final ViewGroup container;
-        if (containerId == rootView.getId()) {
-            container = rootView;
-        } else {
-            container = (ViewGroup) rootView.findViewById(containerId);
-        }
-
+        final ViewGroup container = tryFindContainerView(rootView, containerId);
         if (container == null) {
             throw new IllegalArgumentException(String.format(
-                    "unable to find container for views inside %s", rootView));
+                "unable to find container for views inside %s", rootView));
         }
-
         return container;
     }
 
