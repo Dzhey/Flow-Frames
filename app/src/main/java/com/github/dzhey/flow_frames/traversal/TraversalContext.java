@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import android.view.ViewGroup;
 
 import com.github.dzhey.flow_frames.LayoutSpec;
+import com.github.dzhey.flow_frames.RetainedViewPool;
 import com.github.dzhey.flow_frames.ScreenScoper;
 
 import java.util.Collection;
@@ -57,4 +58,7 @@ public interface TraversalContext {
     @Nullable InflatedLayoutMapping findInflatedLayoutMapping(LayoutSpec.LayoutMapping mapping);
 
     Collection<InflatedLayoutMapping> getInflatedLayoutMappings();
+
+    @Nullable
+    RetainedViewPool getRetainedViewPool();
 }

@@ -1,8 +1,5 @@
 package com.github.dzhey.flow_frames.traversal;
 
-import androidx.annotation.Nullable;
-
-import com.github.dzhey.flow_frames.HistoryFrame;
 import com.github.dzhey.flow_frames.Logger;
 import com.github.dzhey.flow_frames.traversal.pathnodes.AttachIncomingScreenNode;
 import com.github.dzhey.flow_frames.traversal.pathnodes.DetachOutgoingScreenNode;
@@ -12,6 +9,7 @@ import com.github.dzhey.flow_frames.traversal.pathnodes.PathNode;
 import com.github.dzhey.flow_frames.traversal.pathnodes.PrepareIncomingViewsNode;
 import com.github.dzhey.flow_frames.traversal.pathnodes.RegisterOutgoingViewsNode;
 import com.github.dzhey.flow_frames.traversal.pathnodes.RestoreIncomingViewsNode;
+import com.github.dzhey.flow_frames.traversal.pathnodes.RetainOutgoingViewsNode;
 import com.github.dzhey.flow_frames.traversal.pathnodes.SaveOutgoingViewStateNode;
 import com.github.dzhey.flow_frames.traversal.pathnodes.SwapScreenViewsNode;
 
@@ -28,17 +26,7 @@ public class BasicPathKeyChangerDelegate extends BasePathKeyChangerDelegate
             new SimpleTraversalFrameChanger();
 
     private final TraversalFrameChangerResolver mFrameChangerResolver =
-            new TraversalFrameChangerResolver() {
-
-                @Override
-                public TraversalFrameChanger resolveTraversalFrameChanger(
-                        TraversalContext traversalContext,
-                        @Nullable HistoryFrame outgoingHistoryFrame,
-                        HistoryFrame incomingHistoryFrame) {
-
-                    return DEFAULT_VIEW_CHANGER;
-                }
-            };
+        (traversalContext, outgoingHistoryFrame, incomingHistoryFrame) -> DEFAULT_VIEW_CHANGER;
 
     @Override
     protected TraversalPath onBuildTraversalPath(TraversalContext traversalContext) {
@@ -53,6 +41,7 @@ public class BasicPathKeyChangerDelegate extends BasePathKeyChangerDelegate
         path.addPathNode(new SwapScreenViewsNode(mFrameChangerResolver));
         path.addPathNode(new DetachOutgoingScreenNode());
         path.addPathNode(new ExitOutgoingScopeNode());
+        path.addPathNode(new RetainOutgoingViewsNode());
 
         Logger.trace(this, "built traversal path");
 
@@ -77,13 +66,10 @@ public class BasicPathKeyChangerDelegate extends BasePathKeyChangerDelegate
                       final PathNodeAppliedCallback callback) {
 
         Logger.trace(this, "performing traversal: [%s]", pathNode.getName());
-        pathNode.apply(traversalContext, new PathNode.OnAppliedCallback() {
-            @Override
-            public void onApplied() {
-                Logger.trace(BasicPathKeyChangerDelegate.this,
-                        "finished traversal: [%s]", pathNode.getName());
-                callback.onPathNodeApplied(traversalContext, pathNode);
-            }
+        pathNode.apply(traversalContext, () -> {
+            Logger.trace(BasicPathKeyChangerDelegate.this,
+                    "finished traversal: [%s]", pathNode.getName());
+            callback.onPathNodeApplied(traversalContext, pathNode);
         });
     }
 }

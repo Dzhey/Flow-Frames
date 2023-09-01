@@ -1,19 +1,22 @@
 package com.github.dzhey.flow_frames.traversal.pathnodes;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import mortar.MortarScope;
+import androidx.annotation.Nullable;
+
 import com.github.dzhey.flow_frames.HistoryFrame;
 import com.github.dzhey.flow_frames.LayoutSpec;
 import com.github.dzhey.flow_frames.R;
+import com.github.dzhey.flow_frames.RetainedViewPool;
 import com.github.dzhey.flow_frames.Screen;
 import com.github.dzhey.flow_frames.traversal.InflatedLayoutMapping;
 import com.github.dzhey.flow_frames.traversal.TraversalContext;
 import com.github.dzhey.flow_frames.utils.ScreenViewUtils;
+
+import mortar.MortarScope;
 
 /**
  * @author Eugene Byzov <gdzhey@gmail.com>
@@ -41,6 +44,7 @@ public class PrepareIncomingViewsNode extends IncomingScreenPathNode {
             throw new IllegalStateException(String.format(
                     "unable to find scope for incoming screen %s", screen));
         }
+        final RetainedViewPool pool = traversalContext.getRetainedViewPool();
 
         for (LayoutSpec.LayoutMapping mapping : spec.getLayoutMappings()) {
             if (mapping.layoutId() == 0) {
@@ -56,20 +60,29 @@ public class PrepareIncomingViewsNode extends IncomingScreenPathNode {
                         layoutTag);
             }
 
+            if (view == null && pool != null) {
+                view = pool.obtainViewForMapping(screen, mapping);
+                updateViewContextScope(screenScope, view);
+            }
+
             if (view == null) {
                 final Context context = screenScope.createContext(containerView.getContext());
-
                 view = LayoutInflater.from(context).inflate(
-                        mapping.layoutId(), containerView, false);
-                view.setTag(R.id.__screens_key_changer_view_layout_id,
-                        layoutTag);
+                    mapping.layoutId(), containerView, false);
             }
+            view.setTag(R.id.__screens_key_changer_view_layout_id, layoutTag);
 
             traversalContext.registerInflatedLayoutMapping(new InflatedLayoutMapping(
                     view, mapping.containerId(), mapping.layoutId(), mapping.layoutTag()));
         }
 
         onAppliedCallback.onApplied();
+    }
+
+    private void updateViewContextScope(MortarScope scope, View view) {
+        if (view == null) return;
+        final Context context = view.getContext();
+        UpdateMortarScopeUtil.updateMortarScopeForContext(context, scope);
     }
 
     private @Nullable ViewGroup findContainerForLayoutMapping(TraversalContext traversalContext,

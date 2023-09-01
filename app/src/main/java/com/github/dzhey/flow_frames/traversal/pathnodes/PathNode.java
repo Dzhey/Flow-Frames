@@ -21,9 +21,11 @@ public interface PathNode {
         String ATTACH_INCOMING_SCREEN = "attach_incoming_screen";
         String RESTORE_INCOMING_VIEWS = "restore_incoming_views";
         String DETACH_OUTGOING_SCREEN = "detach_outgoing_screen";
+
         String SWAP_SCREEN_VIEWS = "swap_screen_views";
         String EXIT_OUTGOING_SCOPE = "exit_outgoing_scope";
         String REGISTER_OUTGOING_VIEWS = "register_ougoing_views";
+        String RETAIN_OUTGOING_VIEWS = "retain_outgoing_views";
     }
 
     String getName();

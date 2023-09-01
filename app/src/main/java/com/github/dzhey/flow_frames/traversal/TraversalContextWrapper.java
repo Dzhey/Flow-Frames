@@ -1,8 +1,13 @@
 package com.github.dzhey.flow_frames.traversal;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+
+import com.github.dzhey.flow_frames.LayoutSpec;
+import com.github.dzhey.flow_frames.RetainedViewPool;
+import com.github.dzhey.flow_frames.ScreenScoper;
 
 import java.util.Collection;
 import java.util.Map;
@@ -10,8 +15,6 @@ import java.util.Map;
 import flow.Direction;
 import flow.State;
 import flow.TraversalCallback;
-import com.github.dzhey.flow_frames.LayoutSpec;
-import com.github.dzhey.flow_frames.ScreenScoper;
 
 /**
  * @author Eugene Byzov <gdzhey@gmail.com>
@@ -134,6 +137,12 @@ public class TraversalContextWrapper implements TraversalContext {
 
     void setTraversalPath(TraversalPath path) {
         mTraversalPath = path;
+    }
+
+    @Nullable
+    @Override
+    public RetainedViewPool getRetainedViewPool() {
+        return mTraversalContext.getRetainedViewPool();
     }
 
 }

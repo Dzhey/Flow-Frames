@@ -2,6 +2,7 @@ package com.github.dzhey.flow_frames.traversal;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
@@ -21,7 +22,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -97,9 +97,7 @@ public class SimpleTraversalFrameChanger implements TraversalFrameChanger {
 
         final Collection<TransitionSpec> pendingTransitionValues =
                 new ArrayList<>(pendingTransitions.values().size());
-        for (TransitionSpec spec : pendingTransitions.values()) {
-            pendingTransitionValues.add(spec);
-        }
+        pendingTransitionValues.addAll(pendingTransitions.values());
 
         performPendingViewChanges(traversalContext,
                 traversalContext.getContainerView(),
@@ -264,43 +262,23 @@ public class SimpleTraversalFrameChanger implements TraversalFrameChanger {
         }
     }
 
-    protected void removeViews(ViewGroup root, Collection<TransitionSpec> specs) {
-        final List<View> removedViews = new ArrayList<>();
-
-        outer: for (TransitionSpec spec : specs) {
+    protected List<View> removeViews(ViewGroup root, Collection<TransitionSpec> specs) {
+        final ArrayList<View> removed = new ArrayList<>();
+        for (TransitionSpec spec : specs) {
             final Collection<View> viewsToRemove = getRemovedViews(spec);
 
             if (viewsToRemove.isEmpty()) {
                 continue;
             }
-
-            final ViewGroup containerView = tryFindContainerView(root, spec.containerId());
-
-            if (containerView == null) {
-                for (View removedView : removedViews) {
-                    if (removedView.getId() == spec.containerId()) {
-                        // view container is already removed
-                        continue outer;
-                    }
-
-                    if (removedView.findViewById(spec.containerId()) != null) {
-                        // view container (inner) is already removed
-                        continue outer;
-                    }
+            for (View view : viewsToRemove) {
+                ViewParent parent = view.getParent();
+                if (parent instanceof ViewGroup) {
+                    ((ViewGroup) parent).removeView(view);
+                    removed.add(view);
                 }
-
-                final View[] viewsArray = new View[viewsToRemove.size()];
-                viewsToRemove.toArray(viewsArray);
-
-                throw new IllegalStateException(String.format(Locale.US,
-                        "unable to find container to remove view %s from", viewsArray[0]));
             }
-
-            for (View viewToRemove : viewsToRemove) {
-                containerView.removeView(viewToRemove);
-            }
-            removedViews.addAll(viewsToRemove);
         }
+        return removed;
     }
 
     protected @Nullable ViewGroup tryFindContainerView(

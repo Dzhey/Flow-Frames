@@ -1,9 +1,13 @@
 package com.github.dzhey.flow_frames.traversal;
 
 import android.content.Context;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.Nullable;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+
+import com.github.dzhey.flow_frames.LayoutSpec;
+import com.github.dzhey.flow_frames.RetainedViewPool;
+import com.github.dzhey.flow_frames.ScreenScoper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,8 +21,6 @@ import java.util.Set;
 import flow.Direction;
 import flow.State;
 import flow.TraversalCallback;
-import com.github.dzhey.flow_frames.LayoutSpec;
-import com.github.dzhey.flow_frames.ScreenScoper;
 
 /**
  * @author Eugene Byzov <gdzhey@gmail.com>
@@ -37,6 +39,7 @@ public class BasicTraversalContext implements TraversalCallback, TraversalContex
     private Set<String> mAcquisitionTags;
     private Map<Object, Object> mTraversalData;
     private List<InflatedLayoutMapping> mInflatedLayoutMappings;
+    private @Nullable RetainedViewPool mRetainedViewPool;
 
     public BasicTraversalContext(ViewGroup container,
                                  State outgoingState,
@@ -80,6 +83,7 @@ public class BasicTraversalContext implements TraversalCallback, TraversalContex
         mScreenScoper = null;
         mAcquisitionTags = null;
         mIsDestroyed = true;
+        mRetainedViewPool = null;
     }
 
     public void destroyIfReleased() {
@@ -229,5 +233,15 @@ public class BasicTraversalContext implements TraversalCallback, TraversalContex
     @Override
     public Collection<InflatedLayoutMapping> getInflatedLayoutMappings() {
         return Collections.unmodifiableCollection(mInflatedLayoutMappings);
+    }
+
+    public void setRetainedViewPool(@Nullable RetainedViewPool retainedViewPool) {
+        mRetainedViewPool = retainedViewPool;
+    }
+
+    @Nullable
+    @Override
+    public RetainedViewPool getRetainedViewPool() {
+        return mRetainedViewPool;
     }
 }
