@@ -1,10 +1,10 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion project.compileSdkVersion
+    compileSdk project.compileSdk
     defaultConfig {
-        minSdkVersion 24
-        targetSdkVersion project.targetSdkVersion
+        minSdk 24
+        targetSdk project.targetSdk
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -20,12 +20,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
 
-        incremental = true
+        incremental true
     }
     namespace 'com.github.dzhey.flow_frames'
 
     buildFeatures {
-        buildConfig = true
+        buildConfig true
     }
 }
 
