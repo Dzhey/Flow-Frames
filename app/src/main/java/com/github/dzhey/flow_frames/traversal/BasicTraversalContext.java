@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import com.github.dzhey.flow_frames.IScreenScoper;
 import com.github.dzhey.flow_frames.LayoutSpec;
 import com.github.dzhey.flow_frames.RetainedViewPool;
 import com.github.dzhey.flow_frames.ScreenScoper;
@@ -34,7 +35,7 @@ public class BasicTraversalContext implements TraversalCallback, TraversalContex
     private Direction mDirection;
     private Map<Object, Context> mIncomingContexts;
     private TraversalCallback mTraversalCallback;
-    private ScreenScoper mScreenScoper;
+    private IScreenScoper mScreenScoper;
     private boolean mIsDestroyed;
     private Set<String> mAcquisitionTags;
     private Map<Object, Object> mTraversalData;
@@ -47,7 +48,7 @@ public class BasicTraversalContext implements TraversalCallback, TraversalContex
                                  Direction direction,
                                  Map<Object, Context> incomingContexts,
                                  TraversalCallback traversalCallback,
-                                 ScreenScoper screenScoper) {
+                                 IScreenScoper screenScoper) {
 
         mContainerView = container;
         mIncomingState = incomingState;
@@ -152,7 +153,7 @@ public class BasicTraversalContext implements TraversalCallback, TraversalContex
     }
 
     @Override
-    public ScreenScoper getScreenScoper() {
+    public IScreenScoper getScreenScoper() {
         return mScreenScoper;
     }
 

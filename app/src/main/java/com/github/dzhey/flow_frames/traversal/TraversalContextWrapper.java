@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import com.github.dzhey.flow_frames.IScreenScoper;
 import com.github.dzhey.flow_frames.LayoutSpec;
 import com.github.dzhey.flow_frames.RetainedViewPool;
 import com.github.dzhey.flow_frames.ScreenScoper;
@@ -80,7 +81,7 @@ public class TraversalContextWrapper implements TraversalContext {
     }
 
     @Override
-    public ScreenScoper getScreenScoper() {
+    public IScreenScoper getScreenScoper() {
         return mTraversalContext.getScreenScoper();
     }
 

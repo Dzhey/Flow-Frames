@@ -4,6 +4,7 @@ import android.content.Context;
 import androidx.annotation.Nullable;
 import android.view.ViewGroup;
 
+import com.github.dzhey.flow_frames.IScreenScoper;
 import com.github.dzhey.flow_frames.LayoutSpec;
 import com.github.dzhey.flow_frames.RetainedViewPool;
 import com.github.dzhey.flow_frames.ScreenScoper;
@@ -37,7 +38,7 @@ public interface TraversalContext {
 
     ViewGroup getContainerView();
 
-    ScreenScoper getScreenScoper();
+    IScreenScoper getScreenScoper();
 
     void acquire(String tag);
 

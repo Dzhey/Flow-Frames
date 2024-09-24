@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.github.dzhey.flow_frames.HasViewGroup;
+import com.github.dzhey.flow_frames.IScreenScoperFactory;
 import com.github.dzhey.flow_frames.Logger;
 import com.github.dzhey.flow_frames.RetainedViewPool;
 import com.github.dzhey.flow_frames.ScreenScoper;
@@ -29,10 +30,16 @@ public class ContextKeyChanger implements KeyChanger {
     private final HasViewGroup mHasViewGroup;
     private final Delegate mDelegateChanger;
     private RetainedViewPool mRetainedViewPool;
+    private IScreenScoperFactory mScreenScoperFactory;
 
-    public ContextKeyChanger(HasViewGroup viewGroupProvider, Delegate delegateChanger) {
+    public ContextKeyChanger(
+            HasViewGroup viewGroupProvider,
+            Delegate delegateChanger,
+            IScreenScoperFactory screenScoperFactory
+        ) {
         mHasViewGroup = viewGroupProvider;
         mDelegateChanger = delegateChanger;
+        mScreenScoperFactory = screenScoperFactory;
     }
 
     @Override
@@ -63,7 +70,7 @@ public class ContextKeyChanger implements KeyChanger {
                 direction,
                 incomingContexts,
                 proxyCallback,
-                new ScreenScoper());
+                mScreenScoperFactory.create());
         context.setRetainedViewPool(mRetainedViewPool);
 
         mContextHolder.setValue(context);

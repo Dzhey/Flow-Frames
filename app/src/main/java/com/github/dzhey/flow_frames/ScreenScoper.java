@@ -9,8 +9,9 @@ import mortar.MortarScopeDevHelper;
  * @author Eugene Byzov <gdzhey@gmail.com>
  *         Created on 05-Sep-16.
  */
-public class ScreenScoper {
+public class ScreenScoper implements IScreenScoper {
 
+    @Override
     public MortarScope getScreenScope(Context context, Screen screen) {
         final MortarScope parentScope = MortarScope.getScope(context);
 
