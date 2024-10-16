@@ -303,7 +303,7 @@ public class SimpleTraversalFrameChanger implements TraversalFrameChanger {
         }
         boolean viewsDetached = true;
         for (View view : removedViews) {
-            viewsDetached = viewsDetached && !view.isAttachedToWindow();
+            viewsDetached = viewsDetached && !view.isAttachedToWindow() && view.getParent() == null;
         }
         if (viewsDetached) return;
 
