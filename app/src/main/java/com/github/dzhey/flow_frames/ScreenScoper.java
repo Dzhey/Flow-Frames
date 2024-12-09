@@ -15,6 +15,8 @@ public class ScreenScoper implements IScreenScoper {
     public MortarScope getScreenScope(Context context, Screen screen) {
         final MortarScope parentScope = MortarScope.getScope(context);
 
+        if (parentScope.isDestroyed()) return null;
+
         final MortarScope childScope = parentScope.findChild(screen.getScopeName());
         if (childScope != null) {
             return childScope;
