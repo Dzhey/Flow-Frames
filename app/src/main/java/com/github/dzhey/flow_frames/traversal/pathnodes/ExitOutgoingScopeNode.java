@@ -46,8 +46,14 @@ public class ExitOutgoingScopeNode extends BasePathNode {
 
         final Context context = traversalContext.getContainerView().getContext();
 
+        final MortarScope rootScope = MortarScope.getScope(context);
+        if (rootScope.isDestroyed()) {
+            Logger.trace(this, "root scope %s is already destroyed", rootScope.getName());
+            onAppliedCallback.onApplied();
+            return;
+        }
         for (String leftScopeName : outgoingScopes) {
-            final MortarScope scope = MortarScope.findChild(context, leftScopeName);
+            final MortarScope scope = rootScope.findChild(leftScopeName);
 
             if (scope != null && !scope.isDestroyed()) {
                 scope.destroy();
