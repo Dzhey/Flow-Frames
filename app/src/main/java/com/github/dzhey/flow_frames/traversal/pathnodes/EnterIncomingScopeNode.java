@@ -27,6 +27,8 @@ public class EnterIncomingScopeNode extends IncomingScreenPathNode {
         final MortarScope scope = traversalContext.getScreenScoper()
                 .getScreenScope(containerView.getContext(), screen);
 
+        if (scope == null || scope.isDestroyed()) return;
+
         scope.register(screen);
         if (!screen.isInScope()) {
             screen.onEnterScope(scope);
